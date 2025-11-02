@@ -194,25 +194,25 @@ export default function SemesterSetup({ id }: SetupCoursesProps) {
             </Button>
           </Link>
           <div>
-            <h1 className="text-4xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold text-slate-700">
               {semester.name}
             </h1>
-            <p className="text-muted-foreground font-medium">Setup courses and classes</p>
+            <p className="text-lg font-medium text-slate-400">Setup courses and classes</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Courses List */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-8 shadow-xl">
-              <CardHeader className="bg-gradient-to-r from-primary to-accent text-white rounded-t-lg">
-                <CardTitle className="flex items-center gap-2">
+            <Card className="sticky top-8 shadow-xl py-0">
+              <CardHeader className="bg-gradient-to-r from-purple-400 to-pink-300 text-white rounded-t-lg py-4 px-4">
+                <CardTitle className="text-2xl flex items-center gap-2">
                   <BookOpen className="w-5 h-5" />
                   Courses
                 </CardTitle>
                 <CardDescription className="text-white/80">{semester.courses.length} courses</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2 pt-4">
+              <CardContent className="space-y-2 py-4 ">
                 {semester.courses.length === 0 ? (
                   <p className="text-sm text-muted-foreground py-4 text-center">No courses yet</p>
                 ) : (
@@ -222,7 +222,7 @@ export default function SemesterSetup({ id }: SetupCoursesProps) {
                       <div
                         key={course.id}
                         onClick={() => setSelectedCourse(course)}
-                        className={`p-3 rounded-lg cursor-pointer smooth-transition border-2 ${color.border} ${
+                        className={`p-3 rounded-lg cursor-pointer smooth-transition border-1 ${color.border} ${
                           selectedCourse?.id === course.id
                             ? `${color.bg} ${color.text} font-bold shadow-lg scale-105`
                             : `${color.bg} ${color.text} hover:shadow-md hover:scale-102`
@@ -236,7 +236,7 @@ export default function SemesterSetup({ id }: SetupCoursesProps) {
                 )}
                 <Button
                   onClick={() => setShowCourseForm(true)}
-                  className="w-full mt-4 gap-2 bg-gradient-to-r from-primary to-accent hover:shadow-lg text-white font-bold button-hover"
+                  className="w-full mt-4 gap-2 bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-bold button-hover"
                   size="sm"
                 >
                   <Plus className="w-4 h-4" />
@@ -251,56 +251,63 @@ export default function SemesterSetup({ id }: SetupCoursesProps) {
             {showCourseForm ? (
               <CourseForm onSubmit={handleAddCourse} onCancel={() => setShowCourseForm(false)} />
             ) : selectedCourse ? (
-              <Card className="shadow-xl animate-bounce-in">
-                <CardHeader className="bg-gradient-to-r from-primary to-accent text-white rounded-t-lg">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-2xl font-black">{selectedCourse.code}</CardTitle>
-                      <CardDescription className="text-white/80">{selectedCourse.name}</CardDescription>
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDeleteCourse(selectedCourse.id)}
-                      className="font-bold"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6 pt-6">
-                  <div>
-                    <Label className="text-base font-bold mb-4 block">Course Details</Label>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="p-3 bg-primary/10 rounded-lg">
-                        <p className="text-muted-foreground font-medium">Credits</p>
-                        <p className="font-bold text-lg text-primary">{selectedCourse.credits}</p>
-                      </div>
-                    </div>
-                  </div>
+              (() => {
+                const index = semester.courses.findIndex(c => c.id === selectedCourse.id)
+                const color = getColorForCourse(index)
 
-                  <ClassList
-                    course={selectedCourse}
-                    onAddClass={handleAddClass}
-                    onDeleteClass={async (classId) => {
-                      if (confirm("Delete this class?")) {
-                        const updated = {
-                          ...semester,
-                          courses: semester.courses.map((c) =>
-                            c.id === selectedCourse.id
-                              ? { ...c, classes: c.classes.filter((cl) => cl.id !== classId) }
-                              : c,
-                          ),
-                          updatedAt: new Date().toISOString(),
-                        }
-                        setSemester(updated)
-                        await saveSemester(updated)
-                        setSelectedCourse(updated.courses.find((c) => c.id === selectedCourse.id) || null)
-                      }
-                    }}
-                  />
-                </CardContent>
-              </Card>
+                return (
+                  <Card className="shadow-xl animate-bounce-in py-0">
+                    <CardHeader className={`rounded-t-lg py-4 px-4 ${color.badge} ${color.text}`}>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-2xl font-black">{selectedCourse.code}</CardTitle>
+                          <CardDescription className="text-slate-500">{selectedCourse.name}</CardDescription>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="lg"
+                          onClick={() => handleDeleteCourse(selectedCourse.id)}
+                          className="font-bold"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6 py-4">
+                      <div>
+                        <Label className="text-base font-bold mb-4 block">Course Details</Label>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className={`p-3 ${color.badge} ${color.text} rounded-lg`}>
+                            <p className="text-muted-foreground font-medium">Credits</p>
+                            <p className={`font-bold text-lg ${color.text}`}>{selectedCourse.credits}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ClassList
+                        course={selectedCourse}
+                        onAddClass={handleAddClass}
+                        onDeleteClass={async (classId) => {
+                          if (confirm("Delete this class?")) {
+                            const updated = {
+                              ...semester,
+                              courses: semester.courses.map((c) =>
+                                c.id === selectedCourse.id
+                                  ? { ...c, classes: c.classes.filter((cl) => cl.id !== classId) }
+                                  : c,
+                              ),
+                              updatedAt: new Date().toISOString(),
+                            }
+                            setSemester(updated)
+                            await saveSemester(updated)
+                            setSelectedCourse(updated.courses.find((c) => c.id === selectedCourse.id) || null)
+                          }
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                )
+              }) ()
             ) : (
               <Card className="shadow-xl">
                 <CardContent className="flex flex-col items-center justify-center py-16">
@@ -314,18 +321,13 @@ export default function SemesterSetup({ id }: SetupCoursesProps) {
 
         {/* Navigation */}
         <div className="flex gap-4 mt-8 flex-wrap">
-          <Link href="/">
-            <Button variant="outline" className="font-bold button-hover bg-transparent">
-              Back to Dashboard
-            </Button>
-          </Link>
           <Link href={`/semester/${id}/timetables`}>
             <Button variant="outline" className="font-bold button-hover bg-transparent">
               View Timetables
             </Button>
           </Link>
           <Link href={`/timetable/${id}`}>
-            <Button className="bg-gradient-to-r from-primary to-accent hover:shadow-lg text-white font-bold button-hover">
+            <Button className="bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-bold button-hover">
               Build New Timetable
             </Button>
           </Link>

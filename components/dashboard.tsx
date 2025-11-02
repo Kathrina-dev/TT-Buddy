@@ -69,7 +69,7 @@ export default function Dashboard() {
 
         {/* Create New Semester Button */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-5">
-          <Link href="/semester/new">
+          <Link href="/new-sem">
             <Button
               size="lg"
               className="gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-base px-8 py-6 rounded-xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 border-0"
@@ -118,7 +118,7 @@ export default function Dashboard() {
 
       <section className="bg-white text-slate-900 py-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-3xl font-bold text-slate-700 mb-4">Your Semesters</h2>
+          <h2 className="text-3xl md:text-3xl font-bold text-slate-800 mb-4">Your Semesters</h2>
 
           {/* Semesters Grid */}
           {semesters.length === 0 ? (
@@ -147,7 +147,7 @@ export default function Dashboard() {
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <CardTitle className="text-2xl font-bold font-slate-500">{semester.name}</CardTitle>
+                          <CardTitle className="text-2xl font-bold text-slate-600">{semester.name}</CardTitle>
                           <CardDescription className="font-slate-400 font-medium mt-1">
                             {semester.courses?.length || 0} courses
                           </CardDescription>
@@ -160,7 +160,7 @@ export default function Dashboard() {
                     <CardContent>
                       <div className="space-y-3">
                         <div className="flex gap-2 flex-wrap">
-                          <Link href={`/semester/${semester.id}`} className="flex-1">
+                          <Link href={`/${semester.id}`} className="flex-1">
                             <Button
                             size="sm"
                             variant="outline"

@@ -9,12 +9,12 @@ export interface Course {
 export interface Class {
   id: string
   courseId: string
-  type: "lecture" | "lab" | "tutorial"
-  instructor: string
-  room: string
-  startTime: string
-  endTime: string
-  days: string[]
+  type?: "lecture" | "lab" | "tutorial"
+  instructor?: string
+  room?: string
+  startTime?: string
+  endTime?: string
+  days?: string[]
 }
 
 export interface Timetable {

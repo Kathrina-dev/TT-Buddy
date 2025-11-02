@@ -119,50 +119,6 @@ export default function Timetable({ semesterId }: TimetableProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Available Classes */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-8">
-              <CardHeader>
-                <CardTitle className="text-lg">Available Classes</CardTitle>
-                <CardDescription>Drag to add or click</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2 max-h-96 overflow-y-auto">
-                {semester.courses.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No courses available</p>
-                ) : (
-                  semester.courses.map((course) => (
-                    <div key={course.id} className="space-y-1">
-                      <p className="font-semibold text-sm text-foreground">{course.code}</p>
-                      {course.classes.map((cls) => (
-                        <button
-                          key={cls.id}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, cls)}
-                          onDragEnd={handleDragEnd}
-                          onClick={() => handleAddClass(cls)}
-                          disabled={selectedClasses.some((c) => c.id === cls.id)}
-                          className={`w-full text-left p-2 rounded text-xs transition-all flex items-center gap-2 ${
-                            selectedClasses.some((c) => c.id === cls.id)
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-secondary hover:bg-secondary/80 text-foreground"
-                          } ${draggedClass?.id === cls.id ? "opacity-50" : ""}`}
-                        >
-                          <GripVertical className="w-3 h-3 flex-shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <p className="capitalize font-medium text-xs">{cls.type}</p>
-                            <p className="opacity-75 text-xs">
-                              {cls.startTime} - {cls.endTime}
-                            </p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
           {/* Timetable Grid */}
           <div className="lg:col-span-3">
             <Card>
@@ -193,7 +149,7 @@ export default function Timetable({ semesterId }: TimetableProps) {
                           </p>
                           <p className="text-xs text-muted-foreground capitalize">{cls.type}</p>
                           <p className="text-xs text-muted-foreground">
-                            {cls.startTime} - {cls.endTime} | {cls.days.join(", ")}
+                            {cls.startTime} - {cls.endTime} | {cls.days?.join(", ")}
                           </p>
                         </div>
                         <Button
@@ -207,6 +163,49 @@ export default function Timetable({ semesterId }: TimetableProps) {
                       </div>
                     ))}
                   </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          {/* Available Classes */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-8">
+              <CardHeader>
+                <CardTitle className="text-lg">Available Classes</CardTitle>
+                <CardDescription>Drag to add or click</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 max-h-96 overflow-y-auto">
+                {semester.courses.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No courses available</p>
+                ) : (
+                  semester.courses.map((course) => (
+                    <div key={course.id} className="space-y-1">
+                      <p className="font-semibold text-sm text-foreground">{course.code}</p>
+                      {course.classes.map((cls, idx) => (
+                        <button
+                          key={`${cls.id}-${idx}`}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, cls)}
+                          onDragEnd={handleDragEnd}
+                          onClick={() => handleAddClass(cls)}
+                          disabled={selectedClasses.some((c) => c.id === cls.id)}
+                          className={`w-full text-left p-2 rounded text-xs transition-all flex items-center gap-2 ${
+                            selectedClasses.some((c) => c.id === cls.id)
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-secondary hover:bg-secondary/80 text-foreground"
+                          } ${draggedClass?.id === cls.id ? "opacity-50" : ""}`}
+                        >
+                          <GripVertical className="w-3 h-3 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="capitalize font-medium text-xs">{cls.type}</p>
+                            <p className="opacity-75 text-xs">
+                              {cls.startTime} - {cls.endTime}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ))
                 )}
               </CardContent>
             </Card>

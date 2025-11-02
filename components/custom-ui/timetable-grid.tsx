@@ -40,12 +40,12 @@ export default function TimetableGrid({ classes, onRemoveClass }: TimetableGridP
 
   const getClassesForSlot = (day: string, hour: number) => {
     return classes.filter((cls) => {
-      if (!cls.days.includes(day)) return false
-      const startMinutes = timeToMinutes(cls.startTime)
-      const endMinutes = timeToMinutes(cls.endTime)
+      if (!cls.days?.includes(day)) return false
+      // const startMinutes = timeToMinutes(cls.startTime)
+      // const endMinutes = timeToMinutes(cls.endTime)
       const slotStart = hour * 60
       const slotEnd = (hour + 1) * 60
-      return startMinutes < slotEnd && endMinutes > slotStart
+      // return startMinutes < slotEnd && endMinutes > slotStart
     })
   }
 
@@ -74,13 +74,13 @@ export default function TimetableGrid({ classes, onRemoveClass }: TimetableGridP
       <div className="inline-block min-w-full">
         {/* Header */}
         <div className="grid gap-1" style={{ gridTemplateColumns: "80px repeat(5, 1fr)" }}>
-          <div className="p-3 font-bold text-sm text-center bg-gradient-to-r from-primary to-accent text-white rounded-tl-lg">
+          <div className="p-3 font-bold text-sm text-center bg-primary/90 text-white rounded-tl-lg">
             Time
           </div>
           {DAYS.map((day) => (
             <div
               key={day}
-              className="p-3 font-bold text-sm text-center bg-gradient-to-r from-primary to-accent text-white"
+              className="p-3 font-bold text-sm text-center bg-primary/90 to-accent text-white"
             >
               {day}
             </div>
@@ -91,7 +91,7 @@ export default function TimetableGrid({ classes, onRemoveClass }: TimetableGridP
         <div className="grid gap-1" style={{ gridTemplateColumns: "80px repeat(5, 1fr)" }}>
           {HOURS.map((hour) => (
             <div key={`row-${hour}`} className="contents">
-              <div className="p-3 text-xs font-bold text-center bg-gradient-to-b from-primary/20 to-accent/20 text-foreground border-b border-border">
+              <div className="p-3 text-xs font-bold text-center bg-primary/30 text-foreground border-b border-border">
                 {hour}:00
               </div>
               {DAYS.map((day) => {
@@ -114,9 +114,9 @@ export default function TimetableGrid({ classes, onRemoveClass }: TimetableGridP
                           draggedClass?.id === cls.id ? "opacity-50 scale-95" : ""
                         }`}
                       >
-                        <p className="truncate text-xs font-bold">
-                          {cls.type.charAt(0).toUpperCase() + cls.type.slice(1)}
-                        </p>
+                        {/* <p className="truncate text-xs font-bold">
+                          {cls.type.charAt(0).toUpperCase() + cls.type?.slice(1)}
+                        </p> */}
                         <p className="truncate text-xs opacity-90 font-semibold">{cls.room}</p>
                         <p className="truncate text-xs opacity-90 font-semibold">
                           {cls.startTime} - {cls.endTime}
